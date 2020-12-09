@@ -36,6 +36,7 @@ type JUnitTestCase struct {
 	Classname   string            `xml:"classname,attr"`
 	Name        string            `xml:"name,attr"`
 	Time        string            `xml:"time,attr"`
+	SystemOut   string            `xml:"system-out,omitempty"`
 	SkipMessage *JUnitSkipMessage `xml:"skipped,omitempty"`
 	Failure     *JUnitFailure     `xml:"failure,omitempty"`
 }
@@ -60,7 +61,7 @@ type JUnitFailure struct {
 
 // JUnitReportXML writes a JUnit xml representation of the given report to w
 // in the format described at http://windyroad.org/dl/Open%20Source/JUnit.xsd
-func JUnitReportXML(report *parser.Report, noXMLHeader bool, goVersion string, w io.Writer) error {
+func JUnitReportXML(report *parser.Report, noXMLHeader, forceOutput bool, goVersion string, w io.Writer) error {
 	suites := JUnitTestSuites{}
 
 	// convert Report to JUnit test suites
@@ -97,6 +98,9 @@ func JUnitReportXML(report *parser.Report, noXMLHeader bool, goVersion string, w
 				Name:      test.Name,
 				Time:      formatTime(test.Duration),
 				Failure:   nil,
+			}
+			if forceOutput {
+				testCase.SystemOut = strings.Join(test.Output, "\n")
 			}
 
 			if test.Result == parser.FAIL {

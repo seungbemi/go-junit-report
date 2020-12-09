@@ -1668,8 +1668,8 @@ func testJUnitFormatter(t *testing.T, goVersion string) {
 			t.Fatal(err)
 		}
 
-		if string(junitReport.Bytes()) != report {
-			t.Errorf("Fail: %s Report xml ==\n%s, want\n%s", testCase.name, string(junitReport.Bytes()), report)
+		if rpt := junitReport.String(); rpt != report {
+			t.Errorf("Fail: %s Report xml ==\n%s, want\n%s", testCase.name, rpt, report)
 		}
 	}
 }

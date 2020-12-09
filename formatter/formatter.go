@@ -142,11 +142,11 @@ func JUnitReportXML(report *parser.Report, noXMLHeader, forceOutput bool, goVers
 	writer := bufio.NewWriter(w)
 
 	if !noXMLHeader {
-		writer.WriteString(xml.Header)
+		_, _ = writer.WriteString(xml.Header)
 	}
 
-	writer.Write(bytes)
-	writer.WriteByte('\n')
+	_, _ = writer.Write(bytes)
+	_ = writer.WriteByte('\n')
 	writer.Flush()
 
 	return nil
